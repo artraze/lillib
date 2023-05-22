@@ -5,7 +5,8 @@ export PATH="/bin:/usr/local/bin:/usr/bin:/cygdrive/c/Windows/SYSTEM32:/cygdrive
 
 LIBROOT="$(dirname "$(readlink -f "$0")")"
 BUILDDIR="__builddir__"
-SRCFILES="*.c *.cc"
+SRCDIRS=()
+SRCFILES=()
 INCDIRS="."
 APPNAME="app"
 OUT="$BUILDDIR/$APPNAME"
@@ -15,7 +16,7 @@ BOARD_CFG="board_cfg.h"
 while (($#)); do
 	case "$1" in
 	"--rebuild") REBUILD="rebuild" ;;
-	*) SRCFILES="$SRCFILES \"$1\"" ;;
+	*) SRCFILES+=("$1") ;;
 	esac
 	shift 1
 done
@@ -73,7 +74,7 @@ case $BOARD_CPU in
 		;;&
 	STM32F1*)
 		LIBDIR="STM32F1"
-		SRCFILES="$LIBROOT/$LIBDIR/stm32f10x/*.c $SRCFILES"
+		SRCFILES+=("$LIBROOT/$LIBDIR/stm32f10x/"*.c)
 		MFLAGS="-mcpu=cortex-m3 -mthumb -mfloat-abi=soft"
 		MCFLAGS=""
 		;;&
@@ -100,7 +101,15 @@ case $BOARD_CPU in
 		;;
 esac
 
-SRCFILES="$LIBROOT/$LIBDIR/*.c $LIBROOT/$LIBDIR/*.cc $LIBROOT/*.c $LIBROOT/widget/*.c $SRCFILES"
+# Gather source files
+shopt -s nullglob
+SRCDIRS+=("$LIBROOT/$LIBDIR" "$LIBROOT" ".")
+for SRCDIR in "${SRCDIRS[@]}"; do
+	SRCFILES+=("$SRCDIR"/*.{c,cc})
+done
+shopt -u nullglob
+
+# Finalize build vars
 INCDIRS="$INCDIRS $LIBROOT/$LIBDIR $LIBROOT"
 for i in $INCDIRS; do INCFLAGS="$INCFLAGS -I $i"; done
 CFLAGS="$MFLAGS $MCFLAGS -Os -fdata-sections -ffunction-sections -Wall -fsigned-char -D $CPUDEF"
@@ -146,9 +155,6 @@ function should_build()
 }
 
 # Compile
-shopt -s nullglob
-if ! SRCFILES=($SRCFILES); then exit 1; fi
-shopt -u nullglob
 OBJFILES=()
 for SRCFILE in "${SRCFILES[@]}"
 do
