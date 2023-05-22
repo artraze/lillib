@@ -87,6 +87,7 @@ TYPED_TEST(ConvFmtTest, string) {
 
 TYPED_TEST(ConvFmtTest, ints) {
 	EXPECT_EQ(TypeParam::format("x%ix", 1234), "x1234x");
+	EXPECT_EQ(TypeParam::format("=%i-", 1234), "=1234-");
 	EXPECT_EQ(TypeParam::format("x%ux", 1234), "x1234x");
 	EXPECT_EQ(TypeParam::format("x%ix", -1234), "x-1234x");
 	EXPECT_EQ(TypeParam::format("x%ux", -1234), "x4294966062x");
