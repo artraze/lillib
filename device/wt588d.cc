@@ -1,4 +1,4 @@
-#include "drv_disp_WT588D.hh"
+#include "device/wt588d.hh"
 #ifdef DEV_WT588D
 
 #include <inttypes.h>

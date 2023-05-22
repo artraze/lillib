@@ -1,4 +1,4 @@
-#include "drv_disp_TM1637.hh"
+#include "device/tm1637.hh"
 #ifdef DEV_TM1637
 
 extern "C"

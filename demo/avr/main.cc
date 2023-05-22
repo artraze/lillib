@@ -5,9 +5,9 @@
 #include "lillib.h"
 #include "device.h"
 #include <stdio.h>
-#include "drv_misc_WS2812.hh"
-#include "drv_disp_TM1637.hh"
-#include "drv_disp_WT588D.hh"
+#include "device/ws2812.hh"
+#include "device/tm1637.hh"
+#include "device/wt588d.hh"
 
 #define FIXED_0x8_MUL(a, b)       ((uint8_t)((((uint16_t)(a)) * ((uint16_t)(b))) >> 8))
 

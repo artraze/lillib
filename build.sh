@@ -53,7 +53,6 @@ case $BOARD_CPU in
 	# Class
 	ATMEGA328P*)
 		CPUDEF="ATMEGA328P"
-		LIBDIR="AVR"
 		MFLAGS="-mmcu=atmega328p"
 		;;&
 	STM32F030*)
@@ -87,6 +86,7 @@ case $BOARD_CPU in
 		;;
 	ATMEGA*)
 		#export PATH="/cygdrive/c/SysGCC/avr/bin:$PATH"
+		LIBDIR="arch/avr"
 		TOOLCHAIN="avr"
 		MCFLAGS="-fmerge-all-constants -mbranch-cost=2 -fno-inline -fweb -fno-builtin-strcmp"
 		LDFLAGS=""
@@ -103,7 +103,7 @@ esac
 
 # Gather source files
 shopt -s nullglob
-SRCDIRS+=("$LIBROOT/$LIBDIR" "$LIBROOT" ".")
+SRCDIRS+=("$LIBROOT/$LIBDIR" "$LIBROOT" "$LIBROOT/device" ".")
 for SRCDIR in "${SRCDIRS[@]}"; do
 	SRCFILES+=("$SRCDIR"/*.{c,cc})
 done
