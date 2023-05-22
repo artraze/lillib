@@ -555,8 +555,8 @@ void DHT11_demo()
 	uint8_t pin = IOI(B, 0);
 	
 	// Open collector I/O, keep PORT 0, toggle DDR
-	IOI_DDR_SET(pin, 0);
-	IOI_PORT_SET(pin, 0);
+	IOI_DIR_SET(pin, 0);
+	IOI_OUT_SET(pin, 0);
 	
 	DDRB |= 0x02; // For timing testing
 	
@@ -567,9 +567,9 @@ void DHT11_demo()
 	{
 		uint8_t cnt;
 		// Pulse low for at least 18ms
-		IOI_DDR_SET(pin, 1);
+		IOI_DIR_SET(pin, 1);
 		delay(20);
-		IOI_DDR_SET(pin, 0);
+		IOI_DIR_SET(pin, 0);
 		
 		// Now bus should say high 20-40us until device pulls low for ACK
 		// Note this needs a short delay to let the bus got high initially

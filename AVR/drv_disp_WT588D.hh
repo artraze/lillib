@@ -27,33 +27,33 @@ struct WT588D<kIoiData, kIoiBusy>
 	
 	static void init()
 	{
-		IOI_DDR_SET(kIoiData, 1);
-		IOI_DDR_SET(kIoiBusy, 0);
+		IOI_DIR_SET(kIoiData, 1);
+		IOI_DIR_SET(kIoiBusy, 0);
 	}
 	
 	static void write(uint8_t v)
 	{
-		IOI_PORT_SET(kIoiData, 0);
+		IOI_OUT_SET(kIoiData, 0);
 		delay(5);
 		for (uint8_t i=0; i<8 ;i++)
 		{
-			IOI_PORT_SET(kIoiData, 1);
+			IOI_OUT_SET(kIoiData, 1);
 			if (v&1)
 			{
 				udelay(600);
-				IOI_PORT_SET(kIoiData, 0);
+				IOI_OUT_SET(kIoiData, 0);
 				udelay(300);
 			}
 			else
 			{
 				udelay(300);
-				IOI_PORT_SET(kIoiData, 0);
+				IOI_OUT_SET(kIoiData, 0);
 				udelay(600);
 			}
 			v >>= 1;
 		}
 		udelay(30);
-		IOI_PORT_SET(kIoiData, 1);
+		IOI_OUT_SET(kIoiData, 1);
 	}
 	
 	static bool is_busy()
@@ -77,28 +77,28 @@ struct WT588D<kIoiCS, kIoiClk, kIoiData, kIoiBusy>
 	
 	static void init()
 	{
-		IOI_DDR_SET(kIoiCS, 1);
-		IOI_DDR_SET(kIoiClk, 1);
-		IOI_DDR_SET(kIoiData, 1);
-		IOI_DDR_SET(kIoiBusy, 0);
+		IOI_DIR_SET(kIoiCS, 1);
+		IOI_DIR_SET(kIoiClk, 1);
+		IOI_DIR_SET(kIoiData, 1);
+		IOI_DIR_SET(kIoiBusy, 0);
 	}
 	
 	static void write(uint8_t v)
 	{
-		IOI_PORT_SET(kIoiCS, 0);
+		IOI_OUT_SET(kIoiCS, 0);
 		delay(3);
 		for (uint8_t i=0; i<8 ;i++)
 		{
-			IOI_PORT_SET(kIoiClk, 0);
+			IOI_OUT_SET(kIoiClk, 0);
 			udelay(10);
-			IOI_PORT_SET(kIoiData, (v&1));
+			IOI_OUT_SET(kIoiData, (v&1));
 			udelay(50);
-			IOI_PORT_SET(kIoiClk, 1);
+			IOI_OUT_SET(kIoiClk, 1);
 			udelay(50);
 			v >>= 1;
 		}
 		udelay(30);
-		IOI_PORT_SET(kIoiCS, 1);
+		IOI_OUT_SET(kIoiCS, 1);
 	}
 	
 	static bool is_busy()

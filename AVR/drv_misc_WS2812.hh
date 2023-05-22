@@ -19,7 +19,7 @@ void WS2812_send(uint8_t n, uint8_t *grb)
 	
 	uint8_t v, bit;
 	
-	IOI_PORT_SET(kIoi, 0);
+	IOI_OUT_SET(kIoi, 0);
 	
 	__asm__ volatile (
 		"   cli            \n"  /* Disable interrupts!                                                             */ \

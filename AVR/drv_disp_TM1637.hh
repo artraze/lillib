@@ -30,8 +30,8 @@ private:
 	static inline void write_stop();
 };
 
-#define TM1637_CLK(v)     IOI_DDR_SET(kIoiClk, ((v) ? 0 : 1))
-#define TM1637_DAT(v)     IOI_DDR_SET(kIoiDat, ((v) ? 0 : 1))
+#define TM1637_CLK(v)     IOI_DIR_SET(kIoiClk, ((v) ? 0 : 1))
+#define TM1637_DAT(v)     IOI_DIR_SET(kIoiDat, ((v) ? 0 : 1))
 
 template<uint8_t kIoiClk, uint8_t kIoiDat>
 uint8_t TM1637<kIoiClk, kIoiDat>::write_byte(uint8_t data)
@@ -89,12 +89,12 @@ template<uint8_t kIoiClk, uint8_t kIoiDat>
 void TM1637<kIoiClk, kIoiDat>::init()
 {
 	// Idle state is to have both clk high, which means input for OC bus
-	IOI_DDR_SET(kIoiClk, 0);
-	IOI_DDR_SET(kIoiDat, 0);
+	IOI_DIR_SET(kIoiClk, 0);
+	IOI_DIR_SET(kIoiDat, 0);
 	udelay(10);
 	// Open collector, output is always 0, pull up is on board
-	IOI_PORT_SET(kIoiClk, 0);
-	IOI_PORT_SET(kIoiDat, 0);
+	IOI_OUT_SET(kIoiClk, 0);
+	IOI_OUT_SET(kIoiDat, 0);
 	udelay(50);
 	// Ensure starting condition - clock and data are high
 	TM1637_CLK(1);
