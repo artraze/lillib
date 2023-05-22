@@ -20,6 +20,18 @@ while (($#)); do
 	shift 1
 done
 
+function test_gcc_major_version()
+{
+	local VER="$($TOOLCHAIN-gcc --version | grep -Ewo '[0-9]+\.[0-9]+\.[0-9]+' 2> /dev/null)"
+	if [ -n "$VER" ]; then
+		if (( "${VER%%.*}" >= "$1" )); then
+			return 0
+		else
+			return 1
+		fi
+	fi
+	return 2
+}
 
 function get_board_cfg()
 {
@@ -77,6 +89,10 @@ case $BOARD_CPU in
 		TOOLCHAIN="avr"
 		MCFLAGS="-fmerge-all-constants -mbranch-cost=2 -fno-inline -fweb -fno-builtin-strcmp"
 		LDFLAGS=""
+		# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105523
+		if test_gcc_major_version 12; then
+			MCFLAGS="$MCFLAGS --param=min-pagesize=0"
+		fi
 		;;
 	*)
 		echo "Unknown uC '$1'"
